@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, World!</title>
+  </head>
+  <body>
+    <h1>Hello, World!</h1>
+    <a href="{% url 'volunteers:anonymous_user_login' %}">
+      <button>Anonymous User Login</button>
+    </a>
+    <a href="{% url 'volunteers:admin_user_login' %}">
+      <button>Admin Login</button>
+    </a>
+    <a href="{% url 'volunteers:anonymous_user_signup' %}">
+      <button>Anonymous User Signup</button>
+    </a>
+    <a href="{% url 'volunteers:admin_user_signup' %}">
+      <button>Admin Signup</button>
+    </a>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Successful Login</title>
+  </head>
+  <body>
+    {% if user_type == 'admin' %}
+    <h1>Successfully logged in as Admin<span id="username"></span></h1>
+    <div>
+      {% block content %} {% include "anonymous_user_list.html" %}{% endblock %}
+    </div>
+    <a href="{% url 'volunteers:admin_user_logout' %}">Logout</a>
+    {% else %}
+    <h1>Successfully logged in as Anonymous<span id="username"></span></h1>
+    <a href="{% url 'volunteers:anonymous_user_logout' %}">Logout</a>
+    {% endif %}
+  </body>
+</html>
