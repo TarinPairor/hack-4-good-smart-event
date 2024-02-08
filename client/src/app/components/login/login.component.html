@@ -1,0 +1,91 @@
+<div class="container">
+  <div class="row">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12"></div>
+      </div>
+    </div>
+    <div>{{ healthCheckData }}</div>
+    <div class="col-md-6">
+      <button class="btn btn-primary" (click)="toggleLoginForm('admin')">
+        Admin Login
+      </button>
+    </div>
+    <div class="col-md-6">
+      <button class="btn btn-primary" (click)="toggleLoginForm('participant')">
+        Participant Login
+      </button>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <form
+        id="adminLoginForm"
+        *ngIf="loginType === 'admin'"
+        (submit)="onSubmit(adminUsername, adminPassword)"
+      >
+        <!-- Admin login form content -->
+        <h3>Admin Login</h3>
+        <!-- Add your admin login form fields here -->
+        <div class="form-group">
+          <label for="adminusername">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            id="adminusername"
+            placeholder="Enter username"
+            [(ngModel)]="adminUsername"
+            name="adminUsername"
+          />
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="adminPassword"
+            placeholder="Password"
+            [(ngModel)]="adminPassword"
+            name="adminPassword"
+          />
+        </div>
+        <div class="form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="adminRememberMe"
+          />
+          <label class="form-check-label" for="adminRememberMe"
+            >Remember me</label
+          >
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <form id="participantLoginForm" *ngIf="loginType === 'participant'">
+        <!-- Participant login form content -->
+        <h3>Participant Login</h3>
+        <!-- Add your participant login form fields here -->
+        <div class="form-group">
+          <label for="participantusername">Username</label>
+          <input
+            type="username"
+            class="form-control"
+            id="participantusername"
+            placeholder="Enter username"
+          />
+        </div>
+        <div class="form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="participantRememberMe"
+          />
+          <label class="form-check-label" for="participantRememberMe"
+            >Remember me</label
+          >
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
