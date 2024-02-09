@@ -3,6 +3,7 @@ import { LoginService } from '../../services/login.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -17,13 +18,19 @@ export class LoginComponent implements OnInit {
   healthCheckData: Object;
   adminUsername: string;
   adminPassword: string;
+  participantUsername: string;
+  userType: string;
+  errorMsg: string;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private router: Router) {
     this.loginType = 'login';
     this.loginService = new LoginService(httpClient);
     this.healthCheckData = '';
     this.adminUsername = '';
     this.adminPassword = '';
+    this.participantUsername = '';
+    this.userType = '';
+    this.errorMsg = '';
   }
 
   ngOnInit() {
@@ -42,15 +49,65 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onSubmit(adminUsername: string, adminPassword: string) {
+  onSubmitAdmin(adminUsername: string, adminPassword: string) {
     console.log('Admin Username:', adminUsername);
-    console.log('Admin Password:', adminPassword);
     this.loginService
       .adminUserLogin(adminUsername, adminPassword)
       .subscribe((response: any) => {
-        // Handle the response here
-        console.log('response');
-        console.log(response);
+        if (response.status != 'successfully logged in') {
+          this.errorMsg = response.message;
+        } else {
+          // Handle the response here
+          console.log(response);
+          this.adminUsername = adminUsername;
+          this.userType = 'admin';
+          this.router.navigate(['/admin-events']);
+        }
       });
   }
+
+  onSubmitParticipant(
+    participantUsername: string,
+    participantPassword: string
+  ) {
+    console.log('Participant Username:', participantUsername);
+    this.loginService
+      .participantUserLogin(participantUsername, 'participant')
+      .subscribe((response: any) => {
+        if (response.status != 'successfully logged in') {
+          this.errorMsg = response.message;
+        } else {
+          // Handle the response here
+          console.log(response);
+          this.participantUsername = participantUsername;
+          this.userType = 'participant';
+          this.router.navigate(['/admin-events']);
+        }
+      });
+  }
+
+  onClickLogout() {
+    this.loginService.adminUserLogout().subscribe((response: any) => {
+      console.log('response:', response);
+    });
+    //redirect to login page
+    this.router.navigate(['/']);
+  }
+
+  // validate() {
+  //   this.loginService.validate().subscribe((response: any) => {
+  //     console.log('Response:', response);
+  //     const { username, user_type } = response;
+  //     this.loginType = user_type === 'admin' ? 'admin' : 'participant';
+  //     console.log('Username:', username);
+  //     console.log('User Type:', user_type);
+  //     // if user_type is admin, set adminUsername to username
+  //     if (user_type === 'admin') {
+  //       this.adminUsername = username;
+  //     } else {
+  //       this.participantUsername = username;
+  //     }
+  //     this.userType = user_type;
+  //   });
+  // }
 }

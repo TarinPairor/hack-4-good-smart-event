@@ -23,6 +23,8 @@ urlpatterns = [
     path('check_in/', check_in, name='check_in'),
     path('check_out/', check_out, name='check_out'),
     path('get_time_spent_at_event_from_participant/', get_time_spent_at_event_from_participant, name='get_time_spent_at_event_from_participant'),
+    path('get_past_events/', get_past_events, name='get_past_events'),
+    path('get_current_events/', get_current_events, name='get_current_events'),
     # SURVEY URLS
     path('create_survey/', create_survey, name='create_survey'),
     path('answer_survey_question_with_id/', answer_survey_question_with_id, name='answer_survey_question_with_id'),

@@ -6,12 +6,12 @@
       </div>
     </div>
     <div>{{ healthCheckData }}</div>
-    <div class="col-md-6">
+    <div class="col-md-6 col">
       <button class="btn btn-primary" (click)="toggleLoginForm('admin')">
         Admin Login
       </button>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6" style="margin-top: 10px">
       <button class="btn btn-primary" (click)="toggleLoginForm('participant')">
         Participant Login
       </button>
@@ -22,7 +22,7 @@
       <form
         id="adminLoginForm"
         *ngIf="loginType === 'admin'"
-        (submit)="onSubmit(adminUsername, adminPassword)"
+        (submit)="onSubmitAdmin(adminUsername, adminPassword)"
       >
         <!-- Admin login form content -->
         <h3>Admin Login</h3>
@@ -61,17 +61,23 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
-      <form id="participantLoginForm" *ngIf="loginType === 'participant'">
+      <form
+        id="participantLoginForm"
+        *ngIf="loginType === 'participant'"
+        (submit)="onSubmitParticipant(participantUsername, 'participant')"
+      >
         <!-- Participant login form content -->
         <h3>Participant Login</h3>
         <!-- Add your participant login form fields here -->
         <div class="form-group">
           <label for="participantusername">Username</label>
           <input
-            type="username"
+            type="text"
             class="form-control"
             id="participantusername"
             placeholder="Enter username"
+            [(ngModel)]="participantUsername"
+            name="participantUsername"
           />
         </div>
         <div class="form-check">
@@ -88,4 +94,20 @@
       </form>
     </div>
   </div>
+  <div *ngIf="loginType === 'admin'">
+    <h4>Admin Info:</h4>
+    <p>Username: {{ adminUsername }}</p>
+    <p>User Type: {{ userType }}</p>
+  </div>
+  <div *ngIf="loginType === 'participant'">
+    <h4>Participant Info:</h4>
+    <p>Username: {{ participantUsername }}</p>
+    <p>User Type: {{ userType }}</p>
+  </div>
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <button class="btn btn-primary" (click)="onClickLogout()">Logout</button>
+    </div>
+  </div>
+  <p>{{ errorMsg }}</p>
 </div>

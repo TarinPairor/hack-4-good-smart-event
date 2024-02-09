@@ -73,7 +73,7 @@ def admin_user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None and user.is_superuser:
                 login(request, user)
-                return JsonResponse({'status': 'success'})
+                return JsonResponse({'status': 'successfully logged in'})
             else:
                 return JsonResponse({'status': 'error', 'message': 'Invalid username or password, or the user is not a superuser.'})
         else:
@@ -187,6 +187,7 @@ def validate(request):
     Returns:
         JsonResponse: A JSON response containing the user's authentication status.
     """
+    return JsonResponse({'message': str(request.user)})
     if request.user.is_authenticated:
         user_data = {
             'username': request.user.username,
@@ -306,7 +307,7 @@ def end_event(request):
             return JsonResponse({'message': 'Not logged in as an admin user.'})
     else:
         return JsonResponse({'message': 'No event id provided.'})
-    
+
 @csrf_exempt
 def search_event_by_id(request):
     """
@@ -330,6 +331,77 @@ def search_event_by_id(request):
     }
     return JsonResponse(event_data)
 
+@csrf_exempt
+def get_current_events(request):
+    """
+    Retrieves all current events.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        JsonResponse: A JSON response containing the list of current events.
+    """
+    current_events = Event.objects.filter(end_date__isnull=True)
+    event_list = []
+    for event in current_events:
+        event_list.append({
+            'id': event.id,
+            'name': event.name,
+            'description': event.description,
+            'start_date': event.start_date,
+            'end_date': event.end_date
+        })
+    return JsonResponse(event_list, safe=False)
+
+@csrf_exempt
+def get_past_events(request):
+    """
+    Retrieves all past events.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        JsonResponse: A JSON response containing the list of past events.
+    """
+    past_events = Event.objects.filter(end_date__isnull=False)
+    event_list = []
+    for event in past_events:
+        event_list.append({
+            'id': event.id,
+            'name': event.name,
+            'description': event.description,
+            'start_date': event.start_date,
+            'end_date': event.end_date
+        })
+    return JsonResponse(event_list, safe=False)
+
+@csrf_exempt
+def get_events_by_admin(request):
+    """
+    Retrieves all events created by an admin user.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        JsonResponse: A JSON response containing the list of events created by the admin user.
+    """
+    if request.user.is_authenticated and request.user.is_superuser:
+        events = Event.objects.filter(admin=request.user.username)
+        event_list = []
+        for event in events:
+            event_list.append({
+                'id': event.id,
+                'name': event.name,
+                'description': event.description,
+                'start_date': event.start_date,
+                'end_date': event.end_date
+            })
+        return JsonResponse(event_list, safe=False)
+    else:
+        return JsonResponse({'message': 'Not logged in as an admin user.'})
 ################################################################################################
 # ATTENDANCE VIEWS
 ################################################################################################

@@ -1,1 +1,22 @@
-<p>admin-events works!</p>
+<button (click)="generateEvents()">Generate Events</button>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let event of events">
+      <td>{{ event.id }}</td>
+      <td>{{ event.name }}</td>
+      <td>{{ event.description }}</td>
+      <td>{{ event.start_date }}</td>
+      <td>{{ event.end_date }}</td>
+    </tr>
+  </tbody>
+</table>
