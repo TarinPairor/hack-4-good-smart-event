@@ -10,8 +10,13 @@ import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import get_user_model
 
+from openai import OpenAI
+
+client = OpenAI(api_key='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')
+
 
 # Create your views here.
+
 
 def home_page(request):
     """
@@ -487,6 +492,30 @@ def get_time_spent_at_event_from_participant(request):
     else:
         return JsonResponse({'message': 'Event ID and participant username are required.'})
     
+@csrf_exempt
+def get_average_time_spent_from_particants_with_event_id(request):
+    """
+    Retrieves the average time spent by all participants at an event.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        JsonResponse: A JSON response containing the average time spent by all participants at the event.
+    """
+    event_id = request.GET.get('event_id', None)
+    event = Event.objects.get(id=event_id)
+    attendances = Attendance.objects.filter(event=event)
+    time_spent_list = []
+    for attendance in attendances:
+        time_spent = attendance.check_out_time - attendance.check_in_time
+        if attendance.check_out_time is None:
+            time_spent = timezone.now() - attendance.check_in_time
+        time_spent_list.append(time_spent.total_seconds())
+    average_time_spent = sum(time_spent_list) / len(time_spent_list)
+    average_time_spent_readable = str(datetime.timedelta(seconds=average_time_spent))
+    return JsonResponse({'average_time_spent': average_time_spent_readable})
+    
 ################################################################################################
 # SURVEY VIEWS
 ################################################################################################
@@ -563,6 +592,23 @@ def get_survey(request):
     return JsonResponse(survey_data)
 
 
+@csrf_exempt
+def get_surveys_under_event_id(request):
+    event_id = request.GET.get('event_id', None)
+    event = Event.objects.get(id=event_id)
+    surveys = Survey.objects.filter(event=event)
+    survey_list = []
+    for survey in surveys:
+        survey_list.append({
+            'id': survey.id,
+            'name': survey.name,
+            'description': survey.description,
+            'admin': survey.admin,
+            # 'event': survey.event
+        })
+    return JsonResponse(survey_list, safe=False)
+
+
 
 @csrf_exempt
 def get_questions_and_answers_from_survey_id(request):
@@ -597,8 +643,12 @@ def answer_survey_question_with_question_id(request):
                 if answer_text not in question.choices.values_list('text', flat=True):
                     return JsonResponse({'message': 'Invalid choice.'}, status=400)
 
-            # Update the question's answer field
-            question.answer = answer_text
+            # Append the user's answer to the question's answer field
+            answer_string = f":{request.user.username}=:{answer_text}"
+            if question.answer:
+                question.answer += "\n" + answer_string
+            else:
+                question.answer = answer_string
             question.save()
 
             # Create or update the answer in the Answer table
@@ -630,16 +680,27 @@ def get_survey_question_with_question_id(request):
 
 @csrf_exempt
 def get_all_answered_survey_questions_with_event_id(request):
-    event_id = request.GET.get('event_id')
-    event = Event.objects.get(id=event_id)
-    questions = Survey.objects.get(event=event).questions.all().filter(answer__isnull=False)
-    question_list = []
-    for question in questions:
-        question_list.append({
-            'question': question.question,
-            'answer': question.answer
-        })
-    return JsonResponse(question_list, safe=False)
+    if request.method == 'GET':
+        event_id = request.GET.get('event_id')
+        try:
+            event = Event.objects.get(id=event_id)
+        except Event.DoesNotExist:
+            return JsonResponse({'error': 'Event does not exist'}, status=404)
+
+        surveys = Survey.objects.filter(event=event)
+        question_list = []
+        for survey in surveys:
+            questions = survey.questions.all().filter(answer__isnull=False)
+            for question in questions:
+                question_list.append({
+                    'question': question.question,
+                    'answer': question.answer
+                })
+
+        return JsonResponse(question_list, safe=False)
+
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
     # if request.user.is_superuser:
     #     questions = Question.objects.filter(answer__isnull=False)
     #     question_list = []
@@ -651,3 +712,40 @@ def get_all_answered_survey_questions_with_event_id(request):
     #     return JsonResponse(question_list, safe=False)
     # else:
     #     return JsonResponse({'message': 'Only admin users can view answered survey questions.'})
+
+
+@csrf_exempt
+def chatbot_response(request):
+    if request.method == 'GET':
+        event_id = request.GET.get('event_id')
+
+        # The first half of get_all_answered_survey_questions_with_event_id
+        try:
+            event = Event.objects.get(id=event_id)
+        except Event.DoesNotExist:
+            return JsonResponse({'error': 'Event does not exist'}, status=404)
+
+        surveys = Survey.objects.filter(event=event)
+        question_list = []
+        for survey in surveys:
+            questions = survey.questions.all().filter(answer__isnull=False)
+            for question in questions:
+                question_list.append({
+                    'question': question.question,
+                    'answer': question.answer
+                })
+
+        # Format the question_list for the chatbot
+        question_list_string = "\n".join([f"Question: {item['question']}\nAnswer: {item['answer']}" for item in question_list])
+
+        # Pass the question_list to the chatbot
+        response = client.chat.completions.create(model="gpt-3.5-turbo",
+        messages=[
+              {"role": "system", "content": "You are a helpful assistant."},
+              {"role": "user", "content": f"What is the concluded feedback of our event from this data?\n{question_list_string}"}
+          ])
+
+        return JsonResponse({'message': response.choices[0].message.content})
+
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
