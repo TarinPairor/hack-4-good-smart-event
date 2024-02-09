@@ -17,4 +17,13 @@ export class AdminEventsService {
     const url = 'http://127.0.0.1:8000/volunteers/get_events/';
     return this.http.get<Event[]>(url);
   }
+
+  getPastEvents(): Observable<Event[]> {
+    const url = 'http://127.0.0.1:8000/volunteers/get_past_events/';
+    return this.http.get<Event[]>(url);
+  }
+  getCurrentEvents(): Observable<Event[]> {
+    const url = 'http://127.0.0.1:8000/volunteers/get_current_events/';
+    return this.http.get<Event[]>(url);
+  }
 }

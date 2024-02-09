@@ -27,7 +27,7 @@ urlpatterns = [
     path('get_current_events/', get_current_events, name='get_current_events'),
     # SURVEY URLS
     path('create_survey/', create_survey, name='create_survey'),
-    path('answer_survey_question_with_id/', answer_survey_question_with_id, name='answer_survey_question_with_id'),
+    path('answer_survey_question_with_question_id/', answer_survey_question_with_question_id, name='answer_survey_question_with_question_id'),
     path('get_survey_question_with_question_id/', get_survey_question_with_question_id, name='get_survey_question_with_question_id'),
     path('get_all_answered_survey_questions_with_event_id/', get_all_answered_survey_questions_with_event_id, name='get_all_answered_survey_questions_with_event_id'),
     path('get_questions_and_answers_from_survey_id/', get_questions_and_answers_from_survey_id, name='get_questions_and_answers_from_survey_id'),

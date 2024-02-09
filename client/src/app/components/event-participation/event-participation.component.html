@@ -1,0 +1,9 @@
+<p>event-participation works! {{ eventId }}</p>
+<button (click)="onClickCheckIn(eventId)">Check In</button>
+<button (click)="onClickCheckOut(eventId)">Check Out</button>
+<p>event-participation works! {{ eventId }}</p>
+<button (click)="onClickCheckIn(eventId)" *ngIf="toggle">Check In</button>
+<button (click)="onClickCheckOut(eventId)" *ngIf="toggle">Check Out</button>
+<div *ngIf="showOptions">
+  <!-- Your content here -->
+</div>

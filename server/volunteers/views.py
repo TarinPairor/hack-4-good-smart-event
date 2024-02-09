@@ -405,7 +405,7 @@ def get_events_by_admin(request):
 ################################################################################################
 # ATTENDANCE VIEWS
 ################################################################################################
-    
+@csrf_exempt    
 def check_in(request):
     """
     Checks in a participant user to an event.
@@ -416,7 +416,7 @@ def check_in(request):
     Returns:
         JsonResponse: A JSON response indicating the status of the check-in process.
     """
-    if request.user.is_authenticated and ~request.user.is_superuser:
+    if request.user.is_authenticated and not request.user.is_superuser:
         # get event_id from params
         event_id = request.GET.get('event_id', None)
         event = Event.objects.get(id=event_id)
@@ -441,7 +441,7 @@ def check_out(request):
     Returns:
         JsonResponse: A JSON response indicating the status of the check-out process.
     """
-    if request.user.is_authenticated and ~request.user.is_superuser:
+    if request.user.is_authenticated and not request.user.is_superuser:
         # get event_id from params
         event_id = request.GET.get('event_id', None)
         event = Event.objects.get(id=event_id)
@@ -579,7 +579,7 @@ def get_questions_and_answers_from_survey_id(request):
 
 
 @csrf_exempt
-def answer_survey_question_with_id(request):
+def answer_survey_question_with_question_id(request):
     if request.method == 'POST':
         if request.user.is_authenticated and not request.user.is_superuser:
             question_id = request.GET.get('question_id')

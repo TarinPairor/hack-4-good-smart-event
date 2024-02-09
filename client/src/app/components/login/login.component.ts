@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit {
           console.log(response);
           this.participantUsername = participantUsername;
           this.userType = 'participant';
-          this.router.navigate(['/admin-events']);
+          this.router.navigate(['/participant-events']);
         }
       });
   }

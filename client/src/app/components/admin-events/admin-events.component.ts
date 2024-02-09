@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AdminEventsService } from '../../services/admin-events.services';
+import { AdminEventsService } from '../../services/events.services';
 import { Injectable } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
@@ -26,7 +26,7 @@ export class AdminEventsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.generateEvents();
+    //this.generateEvents();
   }
 
   generateEvents() {
