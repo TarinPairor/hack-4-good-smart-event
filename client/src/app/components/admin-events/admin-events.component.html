@@ -1,4 +1,31 @@
-<button (click)="generateEvents()">Generate Events</button>
+<button type="button" class="btn btn-success" (click)="generateEvents()">
+  Generate Events
+</button>
+
+<form (ngSubmit)="onSubmitCreateEvent()" class="create-event">
+  <div class="form-group">
+    <label for="eventName">Event Name</label>
+    <input
+      type="text"
+      class="form-control"
+      id="eventName"
+      [(ngModel)]="eventName"
+      name="eventName"
+      required
+    />
+  </div>
+  <div class="form-group">
+    <label for="eventDescription">Event Description</label>
+    <textarea
+      class="form-control"
+      id="eventDescription"
+      [(ngModel)]="eventDescription"
+      name="eventDescription"
+      required
+    ></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Create Event</button>
+</form>
 
 <table class="table">
   <thead>
@@ -11,12 +38,21 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let event of events">
+    <tr *ngFor="let event of events" (click)="navigateToEvent(event.id)">
       <td>{{ event.id }}</td>
       <td>{{ event.name }}</td>
       <td>{{ event.description }}</td>
       <td>{{ event.start_date }}</td>
       <td>{{ event.end_date }}</td>
+      <td *ngIf="event.end_date === null">
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="onClickEndEvent(event.id)"
+        >
+          End Event
+        </button>
+      </td>
     </tr>
   </tbody>
 </table>

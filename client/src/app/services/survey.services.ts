@@ -13,6 +13,11 @@ export class SurveyServices {
     return this.http.get(url);
   }
 
+  createSurvey(eventId: string, surveyData: any) {
+    const url = `http://127.0.0.1:8000/volunteers/create_survey/?event_id=${eventId}`;
+    return this.http.post(url, surveyData);
+  }
+
   getQuestionsFromSurveyId(surveyId: string): Observable<any> {
     const url =
       'http://127.0.0.1:8000/volunteers/get_question_ids_from_survey_id/';
@@ -37,5 +42,17 @@ export class SurveyServices {
     const url = `http://127.0.0.1:8000/volunteers/answer_survey_question_with_question_id/?question_id=${questionId}`;
     // posts something like {answer: <input>}
     return this.http.post(url, { answer: answer });
+  }
+
+  getAverageTimeSpentFromParticipantsWithEventId(
+    eventId: string
+  ): Observable<any> {
+    const url = `http://127.0.0.1:8000/volunteers/get_average_time_spent_from_particants_with_event_id/?event_id=${eventId}`;
+    return this.http.get(url);
+  }
+
+  chabotResponseWithQuestionId(eventId: string): Observable<any> {
+    const url = `http://127.0.0.1:8000/volunteers/chatbot_response/?event_id=${eventId}`;
+    return this.http.get(url);
   }
 }

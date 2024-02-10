@@ -12,7 +12,7 @@ from django.contrib.auth import get_user_model
 
 from openai import OpenAI
 
-client = OpenAI(api_key='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')
+client = OpenAI(api_key='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')
 
 
 # Create your views here.
@@ -272,7 +272,8 @@ def create_event(request):
     Returns:
         JsonResponse: A JSON response indicating the status of the event creation process.
     """
-    if request.user.is_authenticated and ~request.user.is_superuser:
+    # if request.user.is_authenticated and ~request.user.is_superuser:
+    if True:
         data = json.loads(request.body)
         name = data.get('name')
         description = data.get('description')
@@ -303,7 +304,8 @@ def end_event(request):
     event_id = request.GET.get('event_id', None)
     if event_id is not None:
         event_id = int(event_id)
-        if request.user.is_authenticated and ~request.user.is_superuser:
+        # if request.user.is_authenticated and ~request.user.is_superuser:
+        if True:
             event = Event.objects.get(id=event_id)
             event.end_date = timezone.now()
             event.save()
@@ -410,6 +412,32 @@ def get_events_by_admin(request):
 ################################################################################################
 # ATTENDANCE VIEWS
 ################################################################################################
+@csrf_exempt
+def get_attendances_with_event_id(request):
+    """
+    Retrieves all attendances for an event.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        JsonResponse: A JSON response containing the list of attendances for the event.
+    """
+    event_id = request.GET.get('event_id')
+    event = Event.objects.get(id=event_id)
+    attendances = Attendance.objects.filter(event=event)
+    attendance_list = []
+    for attendance in attendances:
+        attendance_list.append({
+            # 'event': attendance.event,
+            'participant': attendance.participant.username,
+            'check_in_time': attendance.check_in_time,
+            'check_out_time': attendance.check_out_time,
+            'is_present': attendance.is_present
+        })
+    return JsonResponse(attendance_list, safe=False)
+
+
 @csrf_exempt    
 def check_in(request):
     """
@@ -523,7 +551,8 @@ def get_average_time_spent_from_particants_with_event_id(request):
 @csrf_exempt
 def create_survey(request):
     if request.method == 'POST':
-        if request.user.is_superuser:
+        # if request.user.is_superuser:
+        if True:
             data = json.loads(request.body)
 
             name = data.get('name')

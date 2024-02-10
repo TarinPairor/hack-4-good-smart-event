@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 
 import { AdminEventsService } from '../../services/events.services';
 import { Injectable } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { Event } from '../../models/event.models';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -14,15 +16,18 @@ import { Event } from '../../models/event.models';
   standalone: true,
   templateUrl: './admin-events.component.html',
   styleUrls: ['./admin-events.component.css'],
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   providers: [DatePipe],
 })
 export class AdminEventsComponent implements OnInit {
   events: Event[] = [];
+  eventName: string = '';
+  eventDescription: string = '';
 
   constructor(
     private adminEventsService: AdminEventsService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -51,5 +56,36 @@ export class AdminEventsComponent implements OnInit {
         }
       });
     });
+  }
+
+  onSubmitCreateEvent() {
+    this.adminEventsService
+      .createEvent(this.eventName, this.eventDescription)
+      .subscribe((response: any) => {
+        if (response.message != 'Event created successfully.') {
+          console.error('Error:', response.message);
+        } else {
+          console.log('Event created:', response.message);
+          this.generateEvents();
+        }
+      });
+  }
+
+  onClickEndEvent(eventId: number) {
+    this.adminEventsService.endEvent(eventId.toString()).subscribe(
+      () => {
+        console.log('Event ended successfully.');
+        this.router.navigate(['admin-events']);
+        // Add any additional logic here
+      },
+      (error) => {
+        console.error('Error ending event:', error);
+        // Add any error handling logic here
+      }
+    );
+  }
+
+  navigateToEvent(eventId: number) {
+    this.router.navigate(['admin-events', eventId]);
   }
 }

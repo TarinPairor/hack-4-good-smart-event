@@ -23,6 +23,7 @@ urlpatterns = [
     path('search_event_by_id/', search_event_by_id, name='search_event_by_id'),
     path('check_in/', check_in, name='check_in'),
     path('check_out/', check_out, name='check_out'),
+    path('get_attendances_with_event_id/', get_attendances_with_event_id, name='get_attendances_with_event_id'),
     path('get_time_spent_at_event_from_participant/', get_time_spent_at_event_from_participant, name='get_time_spent_at_event_from_participant'),
     path('get_average_time_spent_from_particants_with_event_id/', get_average_time_spent_from_particants_with_event_id, name='get_average_time_spent_from_particants_with_event_id'),
     path('get_past_events/', get_past_events, name='get_past_events'),

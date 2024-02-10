@@ -86,14 +86,6 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  onClickLogout() {
-    this.loginService.adminUserLogout().subscribe((response: any) => {
-      console.log('response:', response);
-    });
-    //redirect to login page
-    this.router.navigate(['/']);
-  }
-
   // validate() {
   //   this.loginService.validate().subscribe((response: any) => {
   //     console.log('Response:', response);

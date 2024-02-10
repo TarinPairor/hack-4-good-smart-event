@@ -5,8 +5,15 @@ import { SignupComponent } from './components/signup/signup.component';
 import { AdminEventsComponent } from './components/admin-events/admin-events.component';
 import { ParticipantEventsComponent } from './components/participant-events/participant-events.component';
 import { EventParticipationComponent } from './components/event-participation/event-participation.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { AppComponent } from './app.component';
+import { HomepageComponent } from './components/homepage/homepage.component';
 
 export const routes: Routes = [
+  {
+    path: '',
+    component: HomepageComponent,
+  },
   {
     path: 'login',
     component: LoginComponent,
@@ -18,6 +25,10 @@ export const routes: Routes = [
   {
     path: 'admin-events',
     component: AdminEventsComponent,
+  },
+  {
+    path: 'admin-events/:event_id',
+    component: DashboardComponent,
   },
   {
     path: 'participant-events',

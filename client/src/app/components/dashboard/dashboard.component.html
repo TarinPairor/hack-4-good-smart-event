@@ -1,0 +1,87 @@
+<p>event-participation works! {{ eventId }}</p>
+
+<div class="container">
+  <div class="explain-text">
+    <b>For now, use this json format to create a survey:</b>
+    <div [innerText]="data"></div>
+  </div>
+  <textarea [(ngModel)]="createSurveyData" class="form-control"></textarea>
+  <button
+    type="button"
+    class="btn btn-primary mb-3"
+    (click)="onSubmitCreateSurvey()"
+  >
+    Create Survey
+  </button>
+  <button
+    type="button"
+    class="btn btn-info"
+    (click)="getAverageTimeSpentFromParticipantsWithEventId(eventId)"
+  >
+    Get Average Time Spent
+  </button>
+  <p>Average Time Spent: {{ averageTimeSpent }}</p>
+
+  <button
+    type="button"
+    class="btn btn-info"
+    (click)="chabotResponseWithQuestionId(eventId)"
+  >
+    Chatbot Response
+  </button>
+  <p>AI Response: {{ aiResponse }}</p>
+
+  <button
+    type="button"
+    class="btn btn-success"
+    (click)="getParticipantsWithEventId(eventId)"
+  >
+    Display Participants
+  </button>
+
+  <table class="table table-striped" *ngIf="attendances">
+    <thead>
+      <tr>
+        <th>Participant</th>
+        <th>Check-in Time</th>
+        <th>Check-out Time</th>
+        <th>Is Present</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Use a loop to iterate over the Attendance objects and display each row -->
+      <tr *ngFor="let attendance of attendances">
+        <td>{{ attendance.participant }}</td>
+        <td>{{ attendance.check_in_time }}</td>
+        <td>{{ attendance.check_out_time }}</td>
+        <td>{{ attendance.is_present }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <button
+    type="button"
+    class="btn btn-success"
+    (click)="onClickGetSurveysUnderEventId(eventId)"
+  >
+    Generate Surveys
+  </button>
+  <table class="table table-striped" *ngIf="surveys">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Admin</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Use a loop to iterate over the Attendance objects and display each row -->
+      <tr *ngFor="let survey of surveys">
+        <td>{{ survey.id }}</td>
+        <td>{{ survey.name }}</td>
+        <td>{{ survey.admin }}</td>
+        <td>{{ survey.description }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

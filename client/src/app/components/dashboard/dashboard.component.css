@@ -1,0 +1,17 @@
+.container {
+  width: 100%;
+  margin: 0 auto;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.form-control {
+  width: 50%;
+  margin: 20px;
+}
+
+.explain-text {
+  font-family: monospace;
+  font-size: small;
+}

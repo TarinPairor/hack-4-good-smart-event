@@ -5,6 +5,8 @@ import { Component, Provider } from '@angular/core'; // Import the missing 'Prov
 import { HttpClientModule } from '@angular/common/http'; // Import the HttpClientModule
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { LoginService } from './services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +26,5 @@ export class AppComponent {
   title = 'client';
   a = false;
 
-  toggleA() {
-    this.a = !this.a;
-  }
+  constructor() {}
 }

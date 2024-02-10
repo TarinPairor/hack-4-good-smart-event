@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AttendanceService } from '../../services/attendance.services';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
@@ -28,7 +28,8 @@ export class EventParticipationComponent {
   constructor(
     private route: ActivatedRoute,
     private attendanceService: AttendanceService,
-    private surveyService: SurveyServices
+    private surveyService: SurveyServices,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -48,7 +49,7 @@ export class EventParticipationComponent {
   }
 
   onClickCheckOut(eventId: string) {
-    this.toggle = !this.toggle;
+    this.router.navigate(['/']);
     this.attendanceService.checkOut(eventId).subscribe(
       () => {
         console.log('Checked out successfully');

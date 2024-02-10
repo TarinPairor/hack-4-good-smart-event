@@ -1,10 +1,24 @@
-<p>event-participation works! {{ eventId }}</p>
+<h3>
+  Here you can see the events from the viewpoint of the participant at event:
+  {{ eventId }}
+</h3>
 
-<button (click)="onClickCheckIn(eventId)" *ngIf="toggle">Check In</button>
+<button
+  type="button"
+  class="btn btn-success"
+  (click)="onClickCheckIn(eventId)"
+  *ngIf="toggle"
+>
+  Check In
+</button>
 
 <div *ngIf="!toggle">
   <!-- Your content here -->
-  <button (click)="onClickGetSurveysUnderEventId(eventId)">
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="onClickGetSurveysUnderEventId(eventId)"
+  >
     Generate Surveys
   </button>
   <div>
@@ -15,6 +29,7 @@
           <th>Name</th>
           <th>Description</th>
           <th>Admin</th>
+          <th>Questions</th>
         </tr>
       </thead>
       <tbody>
@@ -23,8 +38,11 @@
           <td>{{ survey.name }}</td>
           <td>{{ survey.description }}</td>
           <td>{{ survey.admin }}</td>
-          <div>
-            <button (click)="onClickGetQuestionsAndIds(survey.id.toString())">
+          <td>
+            <button
+              class="btn btn-primary"
+              (click)="onClickGetQuestionsAndIds(survey.id.toString())"
+            >
               Questions
             </button>
             <table class="table">
@@ -63,11 +81,18 @@
               </tbody>
             </table>
             <button (click)="onSubmitQuestions()">Submit Answers</button>
-          </div>
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
   <br />
-  <button (click)="onClickCheckOut(eventId)" *ngIf="!toggle">Check Out</button>
+  <button
+    type="button"
+    class="btn btn-success"
+    (click)="onClickCheckOut(eventId)"
+    *ngIf="!toggle"
+  >
+    Check Out
+  </button>
 </div>
