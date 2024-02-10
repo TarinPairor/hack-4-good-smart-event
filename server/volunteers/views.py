@@ -627,7 +627,8 @@ def get_questions_and_answers_from_survey_id(request):
 @csrf_exempt
 def answer_survey_question_with_question_id(request):
     if request.method == 'POST':
-        if request.user.is_authenticated and not request.user.is_superuser:
+        # if request.user.is_authenticated and not request.user.is_superuser:
+        if True:
             question_id = request.GET.get('question_id')
             data = json.loads(request.body)
             answer_text = data.get('answer')
@@ -666,6 +667,16 @@ def answer_survey_question_with_question_id(request):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+@csrf_exempt
+def get_question_ids_from_survey_id(request):
+    survey_id = request.GET.get('survey_id')
+    try:
+        survey = Survey.objects.get(id=survey_id)
+    except Survey.DoesNotExist:
+        return JsonResponse({'message': 'Survey does not exist.'})
+    questions = survey.questions.all()
+    question_ids = [question.id for question in questions]
+    return JsonResponse(question_ids, safe=False)
 
 
 @csrf_exempt
@@ -675,7 +686,8 @@ def get_survey_question_with_question_id(request):
         question = Question.objects.get(id=question_id)
     except Question.DoesNotExist:
         return JsonResponse({'message': 'Question does not exist.'})
-    return JsonResponse({'question': question.question, 'answer': question.answer})
+    choices = question.choices.all()
+    return JsonResponse({'question_id': question.id, 'question': question.question, 'answer': question.answer, 'question_type': question.question_type, 'choices': [choice.text for choice in choices]})
 
 
 @csrf_exempt

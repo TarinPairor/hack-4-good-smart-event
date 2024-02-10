@@ -32,6 +32,7 @@ urlpatterns = [
     path('get_surveys_under_event_id/', get_surveys_under_event_id, name='get_surveys_under_event_id'),
     path('answer_survey_question_with_question_id/', answer_survey_question_with_question_id, name='answer_survey_question_with_question_id'),
     path('get_survey_question_with_question_id/', get_survey_question_with_question_id, name='get_survey_question_with_question_id'),
+    path('get_question_ids_from_survey_id/', get_question_ids_from_survey_id, name='get_question_ids_from_survey_id'),
     path('get_all_answered_survey_questions_with_event_id/', get_all_answered_survey_questions_with_event_id, name='get_all_answered_survey_questions_with_event_id'),
     path('get_questions_and_answers_from_survey_id/', get_questions_and_answers_from_survey_id, name='get_questions_and_answers_from_survey_id'),
     #AI URLS

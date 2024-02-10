@@ -1,9 +1,73 @@
 <p>event-participation works! {{ eventId }}</p>
-<button (click)="onClickCheckIn(eventId)">Check In</button>
-<button (click)="onClickCheckOut(eventId)">Check Out</button>
-<p>event-participation works! {{ eventId }}</p>
+
 <button (click)="onClickCheckIn(eventId)" *ngIf="toggle">Check In</button>
-<button (click)="onClickCheckOut(eventId)" *ngIf="toggle">Check Out</button>
-<div *ngIf="showOptions">
+
+<div *ngIf="!toggle">
   <!-- Your content here -->
+  <button (click)="onClickGetSurveysUnderEventId(eventId)">
+    Generate Surveys
+  </button>
+  <div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Admin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let survey of surveys">
+          <td>{{ survey.id }}</td>
+          <td>{{ survey.name }}</td>
+          <td>{{ survey.description }}</td>
+          <td>{{ survey.admin }}</td>
+          <div>
+            <button (click)="onClickGetQuestionsAndIds(survey.id.toString())">
+              Questions
+            </button>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Question</th>
+                  <th>Answer</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let question of questions; let i = index">
+                  <td>{{ question.question_id }}</td>
+                  <td>{{ question.question }}</td>
+                  <td>
+                    <input
+                      *ngIf="question.question_type != 'choice'"
+                      type="text"
+                      [(ngModel)]="currentAnswers[question.question_id]"
+                    />
+                    <select
+                      *ngIf="question.question_type == 'choice'"
+                      [(ngModel)]="currentAnswers[question.question_id]"
+                    >
+                      <option
+                        *ngFor="let choice of question.choices"
+                        [value]="choice"
+                      >
+                        {{ choice }}
+                      </option>
+                    </select>
+                  </td>
+                  <td>{{ question.question_type }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <button (click)="onSubmitQuestions()">Submit Answers</button>
+          </div>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <br />
+  <button (click)="onClickCheckOut(eventId)" *ngIf="!toggle">Check Out</button>
 </div>
