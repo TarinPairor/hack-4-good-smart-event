@@ -28,11 +28,16 @@ Upon accessing the home URL, users will find a concise description of our web ap
 
 ## Tech Stack
 
-The Smart-Events application utilizes Angular for the frontend and Django for the backend, coupled with a temporary SQLite database. Django, renowned for its comprehensive authentication libraries and middleware, offers a wide array of user authentication methods. Angular, developed by Google, integrates with Django's Model-View-Controller (MVC) architecture, facilitating clear and structured component-based development. This synergy enhances the usability of Angular, as all methods are distinctly defined within separate components, creating efficient development practices.
+- Frontend: Angular
+- Backend: Django
+- Database: SQLite (temporary)
+- Authentication: Django's comprehensive authentication libraries. Especially for middleware handling.
+  Angular, developed by Google, integrates with Django's Model-View-Controller (MVC) architecture, facilitating clear and structured component-based development. This synergy enhances the usability of Angular, as all methods are distinctly defined within separate components, creating efficient development practices.
 
 ## Problems
 
-Regrettably, due to scheduling conflicts and inconvenient timing, collaborative efforts were hindered, rendering it impractical to execute the project as a team. Consequently, significant functionality was compromised. Additionally, encountered challenges arose in the frontend validation method, contributing to further setbacks in the development process.
+- Scheduling conflicts and inconvenient timing hindered collaborative efforts so significant functionality was compromised as a result
+- Frontend validation method encountered challenges, contributing to development setbacks.
 
 ## Future Ideas
 

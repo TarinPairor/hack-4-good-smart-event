@@ -12,7 +12,7 @@ from django.contrib.auth import get_user_model
 
 from openai import OpenAI
 
-client = OpenAI(api_key='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')
+client = OpenAI(api_key='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')
 
 
 # Create your views here.
